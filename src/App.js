@@ -1,75 +1,78 @@
 import "./App.css";
-
 import { useState } from "react";
 
 function App() {
-  const [weight, setweight] = useState(0);
-  const [height, setheight] = useState(0);
+  const [weight, setWeight] = useState("");
+  const [height, setHeight] = useState("");
   const [message, setMessage] = useState("");
   const [bmi, setBmi] = useState("");
 
-  //logic
-  let calcbmi = (e) => {
+  const calcbmi = (e) => {
     e.preventDefault();
-    if (weight == 0 || height == 0) {
-      alert("please enter a vaild weight and height");
-    } else {
-      let bmi = (weight / (height * height)) * 703;
-      setBmi(bmi.toFixed(1));
+    if (weight <= 0 || height <= 0) {
+      alert("Please enter valid weight and height");
+      return;
+    }
+    let bmiValue = (weight / (height * height)) * 703;
+    setBmi(bmiValue.toFixed(1));
 
-      if (bmi < 25) {
-        setMessage("you are underweight");
-      } else if (bmi >= 25 && bmi < 30) {
-        setMessage("you are healthy weight");
-      } else {
-        setMessage("you are overweight");
-      }
+    if (bmiValue < 18.5) {
+      setMessage("You are underweight");
+    } else if (bmiValue >= 18.5 && bmiValue < 25) {
+      setMessage("You are healthy weight");
+    } else {
+      setMessage("You are overweight");
     }
   };
 
-  //Reload
-
-  let reload = () => {
-    window.location.reload();
+  const reload = () => {
+    setWeight("");
+    setHeight("");
+    setBmi("");
+    setMessage("");
   };
 
   return (
     <div className="App">
       <div className="container">
-        container
-        <h2>BMI calculator</h2>
+        <h2>BMI Calculator</h2>
         <form onSubmit={calcbmi}>
           <div>
-            <label>weight(lbs)</label>
+            <label>Weight (lbs)</label>
             <input
-              type="test"
-              placeholder="enter weight value"
+              type="number"
+              placeholder="Enter weight"
               value={weight}
-              onChange={(e) => setweight(e.target.value)}
+              onChange={(e) => setWeight(e.target.value)}
             />
           </div>
           <div>
-            <label>height(in)</label>
+            <label>Height (inches)</label>
             <input
-              type="test"
-              placeholder="enter height value"
+              type="number"
+              placeholder="Enter height"
               value={height}
-              onChange={(event) => setheight(event.target.value)}
+              onChange={(e) => setHeight(e.target.value)}
             />
           </div>
-          <div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
             <button className="btn" type="submit">
-              submit
+              Submit
             </button>
-            <button classname="btn-outline" onClick={reload} type="submit" >
+            <button
+              className="btn-outline"
+              type="button"
+              onClick={reload}
+            >
               Reload
             </button>
           </div>
-
-          <div className="center">
-            <h3>Your BMI is :{bmi}</h3>
-            <p>{message}</p>
-          </div>
+          {bmi && (
+            <div className="center">
+              <h3>Your BMI is: {bmi}</h3>
+              <p>{message}</p>
+            </div>
+          )}
         </form>
       </div>
     </div>
